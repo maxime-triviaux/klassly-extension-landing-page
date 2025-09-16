@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Klassly Image Downloader - Extension Chrome</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 60px 0;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .header p {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            margin-bottom: 40px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-icon {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 30px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        /* Main Content */
+        .main {
+            background: white;
+            border-radius: 30px 30px 0 0;
+            margin-top: -30px;
+            position: relative;
+            z-index: 1;
+            box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .content {
+            padding: 60px 0;
+        }
+
+        /* Features */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .feature {
+            text-align: center;
+            padding: 30px;
+            border-radius: 20px;
+            background: #f8f9ff;
+            border: 1px solid #e0e7ff;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .feature:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.1);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+        }
+
+        .feature h3 {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: #2d3748;
+        }
+
+        .feature p {
+            color: #666;
+            line-height: 1.5;
+        }
+
+        /* Installation Steps */
+        .installation {
+            margin: 60px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 20px;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: #666;
+            font-size: 1.1rem;
+            margin-bottom: 50px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .steps {
+            display: grid;
+            gap: 30px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .step {
+            display: flex;
+            align-items: flex-start;
+            gap: 25px;
+            padding: 30px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+            border: 1px solid #f0f0f0;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .step:hover {
+            transform: translateX(5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .step-number {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .step-content h3 {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: #2d3748;
+        }
+
+        .step-content p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .step-code {
+            background: #1a1a1a;
+            color: #00ff00;
+            padding: 15px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+
+        .step-warning {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px 0;
+        }
+
+        .step-success {
+            background: #d1edff;
+            border: 1px solid #74b9ff;
+            color: #0984e3;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px 0;
+        }
+
+        /* Download Button */
+        .download-section {
+            text-align: center;
+            margin: 60px 0;
+            padding: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            color: white;
+        }
+
+        .download-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            text-decoration: none;
+            padding: 20px 40px;
+            border-radius: 15px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .download-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+          /* Conteneur des boutons de téléchargement */
+          .download-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+
+        /* Bouton principal (téléchargement) */
+        .download-btn.primary {
+            background: rgba(255,255,255,0.3);
+            border: 2px solid rgba(255,255,255,0.5);
+        }
+
+        .download-btn.primary:hover {
+            background: rgba(255,255,255,0.4);
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+        }
+
+        /* Bouton secondaire (GitHub) */
+        .download-btn.secondary {
+            background: rgba(255,255,255,0.1);
+            border: 2px solid rgba(255,255,255,0.2);
+        }
+
+        .download-btn.secondary:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        /* Responsive pour les boutons */
+        @media (max-width: 640px) {
+            .download-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .download-btn {
+                width: 280px;
+                justify-content: center;
+            }
+        }
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 40px 0;
+            color: var(--text-light);
+            border-top: 1px solid #e0e0e0;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2.5rem;
+            }
+
+            .header p {
+                font-size: 1.1rem;
+            }
+
+            .features {
+                grid-template-columns: 1fr;
+            }
+
+            .step {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .step-number {
+                margin: 0 auto 20px;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .step {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        .step:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .step:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .step:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        .step:nth-child(4) {
+            animation-delay: 0.4s;
+        }
+
+        .step:nth-child(5) {
+            animation-delay: 0.5s;
+        }
+
+        /* Chrome Logo */
+        .chrome-logo {
+            width: 24px;
+            height: 24px;
+            background: conic-gradient(from 0deg, #ea4335 0deg 90deg, #fbbc04 90deg 180deg, #34a853 180deg 270deg, #4285f4 270deg 360deg);
+            border-radius: 50%;
+            position: relative;
+            display: inline-block;
+            margin-right: 8px;
+        }
+
+        .chrome-logo::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 10px;
+            height: 10px;
+            background: #4285f4;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <div class="container">
+            <div class="hero-icon">
+                📥
+            </div>
+            <h1>Klassly Image Downloader</h1>
+            <p>Extension Chrome pour télécharger facilement l'image d'un post Klassly en un seul clic</p>
+        </div>
+    </div>
+
+    <div class="main">
+        <div class="container">
+            <div class="content">
+                <!-- Features -->
+                <div class="features">
+                    <div class="feature">
+                        <div class="feature-icon">⚡</div>
+                        <h3>Téléchargement Rapide</h3>
+                        <p>Téléchargez l'image d'un post Klassly en un seul clic avec le bouton associé</p>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon">🎯</div>
+                        <h3>Ciblage Intelligent</h3>
+                        <p>Spécialement conçu pour fonctionner sur klass.ly avec une détection intelligente des images
+                        </p>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon">📁</div>
+                        <h3>Lancement Manuel</h3>
+                        <p>Les boutons seront automatiquement ajoutés sur les posts Klassly, mais seulement quand vous
+                            lancerez l'action dans l'extension</p>
+                    </div>
+                </div>
+
+                <!-- Download Section -->
+                <div class="download-section">
+                    <h2 style="margin-bottom: 20px;">Télécharger l'Extension</h2>
+                    <p style="margin-bottom: 30px; opacity: 0.9;">Téléchargez l'extension ou consultez le code source
+                    </p>
+
+                    <div class="download-buttons">
+                        <a href="#" class="download-btn primary" id="downloadBtn">
+                            <span>📦</span>
+                            Télécharger l'extension
+                        </a>
+                        <a href="#" class="download-btn secondary" id="githubBtn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="margin-right: 8px;">
+                                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                            </svg>
+                            Voir sur GitHub
+                        </a>
+                    </div>
+
+                    <p style="margin-top: 20px; font-size: 0.9rem; opacity: 0.8;">
+                        <em>Extension compatible Chrome - Installation en mode développeur</em>
+                    </p>
+                </div>
+
+                <!-- Installation Steps -->
+                <div class="installation">
+                    <h2 class="section-title">Guide d'Installation</h2>
+                    <p class="section-subtitle">Suivez ces étapes simples pour installer l'extension dans Chrome</p>
+
+                    <div class="steps">
+                        <div class="step">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <h3>📦 Télécharger le fichier ZIP</h3>
+                                <p>Cliquez sur le bouton de téléchargement ci-dessus pour obtenir le fichier
+                                    <code>klassly-image-downloader.zip</code> depuis GitHub.</p>
+                                <div class="step-success">
+                                    ✅ Le fichier sera téléchargé dans votre dossier "Téléchargements"
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="step">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <h3>📂 Décompresser le fichier ZIP</h3>
+                                <p>Localisez le fichier téléchargé et décompressez-le :</p>
+                                <p><strong>Sur Windows :</strong> Clic droit → "Extraire tout"</p>
+                                <p><strong>Sur Mac :</strong> Double-clic sur le fichier ZIP</p>
+                                <p><strong>Sur Linux :</strong> Clic droit → "Extraire ici"</p>
+                                <div class="step-warning">
+                                    ⚠️ Gardez le dossier décompressé dans un endroit permanent (ne le supprimez pas
+                                    après installation)
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="step">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <h3><span class="chrome-logo"></span> Ouvrir Chrome et accéder aux extensions</h3>
+                                <p>Ouvrez Google Chrome et naviguez vers la page des extensions :</p>
+                                <div class="step-code">chrome://extensions/</div>
+                                <p>Ou utilisez le menu : <strong>⋮ Menu → Plus d'outils → Extensions</strong></p>
+                            </div>
+                        </div>
+
+                        <div class="step">
+                            <div class="step-number">4</div>
+                            <div class="step-content">
+                                <h3>🔧 Activer le mode développeur</h3>
+                                <p>Dans la page des extensions, activez le "Mode développeur" en cliquant sur
+                                    l'interrupteur en haut à droite de la page.</p>
+                                <div class="step-warning">
+                                    💡 Le mode développeur est nécessaire pour installer des extensions non publiées sur
+                                    le Chrome Web Store
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="step">
+                            <div class="step-number">5</div>
+                            <div class="step-content">
+                                <h3>📁 Charger l'extension</h3>
+                                <p>Cliquez sur le bouton <strong>"Charger l'extension non empaquetée"</strong> qui est
+                                    maintenant visible.</p>
+                                <p>Sélectionnez le <strong>dossier décompressé</strong> (pas le fichier ZIP) contenant
+                                    l'extension.</p>
+                                <div class="step-success">
+                                    🎉 L'extension est maintenant installée ! Vous devriez voir l'icône de Klassly Image
+                                    Downloader dans votre barre d'outils Chrome.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="step">
+                            <div class="step-number">6</div>
+                            <div class="step-content">
+                                <h3>✨ Utiliser l'extension</h3>
+                                <p>Rendez-vous sur <strong>klass.ly</strong> et vous verrez apparaître un bouton de
+                                    téléchargement flottant en bas à droite de la page.</p>
+                                <p>Cliquez dessus pour télécharger toutes les images de la page !</p>
+                                <div class="step-success">
+                                    📁 Les images seront sauvegardées dans votre dossier
+                                    "Téléchargements/klassly-images/"
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Troubleshooting -->
+                <div
+                    style="margin: 60px 0; padding: 40px; background: #f8f9ff; border-radius: 20px; border: 1px solid #e0e7ff;">
+                    <h3 style="color: #2d3748; margin-bottom: 20px; text-align: center;">🔧 Problèmes courants</h3>
+                    <div style="display: grid; gap: 20px; max-width: 600px; margin: 0 auto;">
+                        <div>
+                            <strong>L'extension n'apparaît pas :</strong>
+                            <p style="color: #666; margin: 5px 0;">Vérifiez que le mode développeur est bien activé et
+                                rechargez la page des extensions.</p>
+                        </div>
+                        <div>
+                            <strong>Le bouton ne s'affiche pas sur le site :</strong>
+                            <p style="color: #666; margin: 5px 0;">Assurez-vous d'être sur klass.ly et rechargez la
+                                page.</p>
+                        </div>
+                        <div>
+                            <strong>Erreur lors du chargement :</strong>
+                            <p style="color: #666; margin: 5px 0;">Vérifiez que vous sélectionnez bien le dossier
+                                décompressé, pas le fichier ZIP.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <div class="container">
+            <p>&copy; 2024 Klassly Image Downloader - Extension Chrome développée avec ❤️</p>
+            <p style="margin-top: 10px; font-size: 0.9rem;">
+                Développé en TypeScript avec une approche moderne et sécurisée
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Animation au scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observer les éléments
+        document.querySelectorAll('.feature, .step').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+
+        // Gestion du bouton de téléchargement
+        document.getElementById('downloadBtn').addEventListener('click', function (e) {
+            e.preventDefault();
+            alert('Le téléchargement sera bientôt disponible !\n\nEn attendant, vous pouvez :\n1. Compiler le projet avec "npm run package"\n2. Utiliser le fichier klassly-image-downloader.zip généré');
+        });
+
+        // Gestion du bouton GitHub
+        document.getElementById('githubBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+            // Remplacez par votre URL GitHub réelle
+            window.open('https://github.com/votre-username/klassly-image-downloader', '_blank');
+        });
+
+        // Effet de parallaxe sur le header
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const header = document.querySelector('.header');
+            header.style.transform = `translateY(${scrolled * 0.5}px)`;
+        });
+    </script>
+</body>
+
+</html>
