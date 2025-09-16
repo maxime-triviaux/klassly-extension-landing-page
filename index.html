@@ -603,14 +603,27 @@
         // Gestion du bouton de téléchargement
         document.getElementById('downloadBtn').addEventListener('click', function (e) {
             e.preventDefault();
-            alert('Le téléchargement sera bientôt disponible !\n\nEn attendant, vous pouvez :\n1. Compiler le projet avec "npm run package"\n2. Utiliser le fichier klassly-image-downloader.zip généré');
+            // URL du fichier ZIP à télécharger
+            const zipUrl = 'klassly-image-downloader.zip';
+            
+            // Création d'un élément <a> temporaire pour le téléchargement
+            const downloadLink = document.createElement('a');
+            downloadLink.href = zipUrl;
+            downloadLink.download = 'klassly-image-downloader.zip';
+            
+            // Ajout au DOM et déclenchement du clic
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            
+            // Nettoyage de l'élément temporaire
+            document.body.removeChild(downloadLink);
         });
 
         // Gestion du bouton GitHub
         document.getElementById('githubBtn').addEventListener('click', function(e) {
             e.preventDefault();
             // Remplacez par votre URL GitHub réelle
-            window.open('https://github.com/votre-username/klassly-image-downloader', '_blank');
+            window.open('https://github.com/maxime-triviaux/klassly-image-downloader', '_blank');
         });
 
         // Effet de parallaxe sur le header
